@@ -19,9 +19,7 @@ const scraper = async (url, valRicerca, elementi, nome, prezzo, link, stato) => 
 
         return Array.from(articoli).map((articolo) => {
             const nome = articolo.querySelector(selettoreNome).innerText.replace('NEW LISTING','').trim();
-            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('$', '');
-            const link = articolo.querySelector(selettoreUrl).href;
-            const stato = articolo.querySelector(selettoreStato).innerText
+            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('EUR', '€');
 
             return { nome, prezzo, stato, link };
         });
