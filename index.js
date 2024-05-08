@@ -2,9 +2,8 @@ const puppeteer = require('puppeteer');
 
 const url = 'https://www.ebay.com/';
 const valRicerca = 'nvidia rtx 3080ti';
-let ris = [];
 
-const scraper = async (url, valRicerca, elementi, nome, prezzo, link, stato) => {
+const scraper = async (url, valRicerca, elementi, nome, prezzo) => {
     const browser = await puppeteer.launch();
     const pagina = await browser.newPage();
 
@@ -14,16 +13,16 @@ const scraper = async (url, valRicerca, elementi, nome, prezzo, link, stato) => 
 
     await pagina.waitForNavigation();
 
-    const risultati = await pagina.evaluate((selettoreElementi, selettoreNome, selettorePrezzo, selettoreUrl, selettoreStato) => {
+    const risultati = await pagina.evaluate((selettoreElementi, selettoreNome, selettorePrezzo) => {
         const articoli = document.querySelectorAll(selettoreElementi);
 
         return Array.from(articoli).map((articolo) => {
             const nome = articolo.querySelector(selettoreNome).innerText.replace('NEW LISTING','').trim();
-            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('EUR', '€');
+            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('$', '');
 
-            return { nome, prezzo, stato, link };
+            return { nome, prezzo };
         });
-    }, elementi, nome, prezzo, link, stato);
+    }, elementi, nome, prezzo);
 
     risultati.sort((a, b) => a.prezzo - b.prezzo);
     console.log(risultati);
@@ -32,4 +31,4 @@ const scraper = async (url, valRicerca, elementi, nome, prezzo, link, stato) => 
 
 };
 
-scraper(url, valRicerca, '.s-item__info', '.s-item__title', '.s-item__price', 'a[href]', '.SECONDARY_INFO');
+scraper(url, valRicerca, '.s-item__info', '.s-item__title', '.s-item__price');
