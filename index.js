@@ -18,12 +18,13 @@ const scraper = async (url, valRicerca, elementi, nome, prezzo) => {
 
         return Array.from(articoli).map((articolo) => {
             const nome = articolo.querySelector(selettoreNome).innerText.replace('NEW LISTING','').trim();
-            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('EUR', '€');
+            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('$', '');
 
             return { nome, prezzo };
         });
     }, elementi, nome, prezzo);
 
+    risultati.sort((a, b) => a.prezzo - b.prezzo);
     console.log(risultati);
 
     await browser.close();
