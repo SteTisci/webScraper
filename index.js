@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 const url = 'https://www.ebay.com/';
-const valRicerca = 'nvidia rtx 3080ti';
+const valRicerca = 'oneplus 11';
 
 const scraper = async (url, valRicerca, elementi, nome, prezzo, stato, link) => {
     const browser = await puppeteer.launch();
@@ -18,7 +18,7 @@ const scraper = async (url, valRicerca, elementi, nome, prezzo, stato, link) => 
 
         return Array.from(articoli).map((articolo) => {
             const nome = articolo.querySelector(selettoreNome).innerText.replace('NEW LISTING','').trim();
-            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace('$', '');
+            const prezzo = articolo.querySelector(selettorePrezzo).innerText.replace(/\$/g, "").replace(/\s+to\s+/g, "$ to ") + '$';
             const stato = articolo.querySelector(selettoreStato).innerText;
             const link = articolo.querySelector(selettoreUrl).href;
 
